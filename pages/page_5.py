@@ -8,7 +8,6 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 from collections import Counter
-import matplotlib.pyplot as plt
 import sklearn
 import cv2
 from PIL import Image

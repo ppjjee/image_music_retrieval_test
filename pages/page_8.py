@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 from collections import Counter
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import tensorflow
 import sklearn
 import cv2
