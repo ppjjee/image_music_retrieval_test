@@ -4,21 +4,21 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 from collections import Counter
-import tensorflow
-import sklearn
-import cv2
+# import tensorflow
+# import sklearn
+# import cv2
 from PIL import Image
 from tqdm import tqdm
-from tensorflow.python.client import device_lib
-from tensorflow.keras import applications
-from tensorflow.keras import layers
-from tensorflow.keras import losses
-from tensorflow.keras import optimizers
-from tensorflow.keras import metrics
-from tensorflow.keras import Model
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras import applications
-from tensorflow.keras.applications.efficientnet import EfficientNetB1, preprocess_input
+# from tensorflow.python.client import device_lib
+# from tensorflow.keras import applications
+# from tensorflow.keras import layers
+# from tensorflow.keras import losses
+# from tensorflow.keras import optimizers
+# from tensorflow.keras import metrics
+# from tensorflow.keras import Model
+# from tensorflow.keras.preprocessing import image
+# from tensorflow.keras import applications
+# from tensorflow.keras.applications.efficientnet import EfficientNetB1, preprocess_input
 
 
 
