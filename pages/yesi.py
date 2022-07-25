@@ -9,34 +9,34 @@ import pandas as pd
 import numpy as np
 from collections import Counter
 # import matplotlib.pyplot as plt
-import sklearn
-import cv2
+# import sklearn
+# import cv2
 from PIL import Image
 from tqdm import tqdm
-import tensorflow 
-from tensorflow.python.client import device_lib
-from tensorflow.keras import layers
-from tensorflow.keras import losses
-from tensorflow.keras import optimizers
-from tensorflow.keras import metrics
-from tensorflow.keras import Model
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras import applications
-from tensorflow.keras.applications.efficientnet import EfficientNetB1, preprocess_input
+# import tensorflow 
+# from tensorflow.python.client import device_lib
+# from tensorflow.keras import layers
+# from tensorflow.keras import losses
+# from tensorflow.keras import optimizers
+# from tensorflow.keras import metrics
+# from tensorflow.keras import Model
+# from tensorflow.keras.preprocessing import image
+# from tensorflow.keras import applications
+# from tensorflow.keras.applications.efficientnet import EfficientNetB1, preprocess_input
 import uuid
 
 # set remove keras messages
-tensorflow.compat.v1.logging.set_verbosity(tensorflow.compat.v1.logging.ERROR)
+# tensorflow.compat.v1.logging.set_verbosity(tensorflow.compat.v1.logging.ERROR)
 
-# set GPU for keras version
-os.environ['CUDA_VISIBLE_DEVICES']='7'
-physical_devices = tensorflow.config.list_physical_devices('GPU')
-# print('physical_device:', physical_devices)
-try:
-    tensorflow.config.experimental.set_visible_devices(physical_devices[0], 'GPU')
-    tensorflow.config.experimental.set_memory_growth(physical_devices[0], True)
-except RuntimeError as e:
-    print(e)
+# # set GPU for keras version
+# os.environ['CUDA_VISIBLE_DEVICES']='7'
+# physical_devices = tensorflow.config.list_physical_devices('GPU')
+# # print('physical_device:', physical_devices)
+# try:
+#     tensorflow.config.experimental.set_visible_devices(physical_devices[0], 'GPU')
+#     tensorflow.config.experimental.set_memory_growth(physical_devices[0], True)
+# except RuntimeError as e:
+#     print(e)
 
 def get_result_dir():
     path = os.getcwd() + "/results"
