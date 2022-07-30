@@ -1,4 +1,3 @@
-from turtle import onclick
 import streamlit as st
 from st_clickable_images import clickable_images
 import os, glob, pathlib, random, pickle, time, requests, json, commons
