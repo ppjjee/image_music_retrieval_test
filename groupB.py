@@ -639,7 +639,20 @@ def survey_page():
 
         ## save results
         if st.checkbox("Do you want to move to the next page?", key='fin'):
-            results_B = {'gender': gender, 'age': age, 'education': education, 'ethnicity': ethnicity, 'satisfaction1': satisfaction1, 'satisfaction2': satisfaction2, 'satisfaction3': satisfaction3, 'ItU1': ItU1, 'ItU2': ItU2, 'ItU3': ItU3}
+            results_B = {'gender': gender, 'age': age, 'education': education, 'ethnicity': ethnicity,
+             'satisfaction1': satisfaction1, 
+             'satisfaction2': satisfaction2, 
+             'satisfaction3': satisfaction3, 
+             'satisfaction4': satisfaction4, 
+             'satisfaction5': satisfaction5, 
+             'ItU1': ItU1, 
+             'ItU2': ItU2, 
+             'ItU3': ItU3,
+             'ItU4': ItU4,
+             'valence1': valence1,
+             'valence2': valence2,
+             'valence3': valence3,
+             }
             with open(save_path, "r") as json_file:
                 data = {}
                 data = json.load(json_file)
@@ -649,7 +662,7 @@ def survey_page():
                 json.dump(data, save_f, ensure_ascii=False, indent=4)
                 print("exists, after", data)
             
-            sftp.upload(save_path, sftp.dirSurvey + '/' + str(uuid.uuid4()) + ".json")
+            sftp.upload(save_path, sftp.dirRemoteSurveyResult + '/' + str(uuid.uuid4()) + ".json")
             st.button('END', on_click=CB_Page9)  
                                                 
 
