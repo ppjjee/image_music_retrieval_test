@@ -111,46 +111,50 @@ def get_result_dir():
 
 mood_imgs = [
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/calm.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/dark.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/fast.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/fun.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/fun_sport_children.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/fun_summer_holiday.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/funny.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/love.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/love_relaxing_sad.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/melodic_party.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/movie_background_film.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/nature.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/nature_calm_summer.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/nature_summer_film.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/fun_funny_party.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/melodic.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/relaxing.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/retro_love_melodic.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/romantic_inspiring_dream.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/romantic_holiday_travel.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/sad.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/sad_calm.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/space.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/space_nature_calm.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/space_sad_heavy.jpg?raw=true'
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/sad_emotional.jpg?raw=true'              
             ]
+ mood_imgs2 = [
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/dark_calm_nature.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/funny.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/groovy_happy.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/love_retro_melodic.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/nature_dramatic_dark.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/retro_love_melodic.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/sad_calm.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/sexy.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/slow.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/soft.jpg?raw=true'
+            ]           
 theme_imgs = [
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/adventure_action.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/children.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/christmas.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/corporate.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/dark.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/fast.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/film.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/corporate_children.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/holiday_summer_travel.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/movie.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/nature.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/nature_dark.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/party.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/space.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/sport.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/sport_action_adventure.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/summer.jpg?raw=true',
-                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/summer_holiday_travel.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/summer_party.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/trailer_film_background.jpg?raw=true'
+            ]
+theme_imgs2 = [
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/children.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/film.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/game.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/love.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/movie_background_film.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/nature_dark.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/space.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/sport_action_adventure.jpg?raw=true',
+                'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/summer_holiday_travel.jpg?raw=true',
             ]
 
 def image_page(imgs, cb):
@@ -546,7 +550,7 @@ def music_page(cb):
 
     ## save results
     with st.container():
-        satis_result = st.slider('Do you satisfy with the recommended music?', min_value=0, max_value=100, value=50, step=1)
+        satis_result = st.slider('Do you think the retrieved music represents the selected image well?', min_value=0, max_value=100, value=50, step=1)
         st.write('-----')
         if st.checkbox("Do you want to move to the next page?", key='check4'):
             with open(save_path, "r") as json_file:
@@ -694,7 +698,7 @@ elif st.session_state.active_page == 'Page_1':
 elif st.session_state.active_page == 'Page_2':
     music_page(CB_Page2)
 elif st.session_state.active_page == 'Page_3':
-    image_page(mood_imgs, CB_Page3)
+    image_page(mood_imgs2, CB_Page3)
 elif st.session_state.active_page == 'Page_4':
     music_page(CB_Page4)
 elif st.session_state.active_page == 'Page_5':
@@ -702,7 +706,7 @@ elif st.session_state.active_page == 'Page_5':
 elif st.session_state.active_page == 'Page_6':
     music_page(CB_Page6)
 elif st.session_state.active_page == 'Page_7':
-    image_page(theme_imgs, CB_Page7)
+    image_page(theme_imgs2, CB_Page7)
 elif st.session_state.active_page == 'Page_8':
     music_page(CB_Page8)
 elif st.session_state.active_page == 'Page_9':
