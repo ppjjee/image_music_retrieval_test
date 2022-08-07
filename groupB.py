@@ -26,29 +26,58 @@ if 'active_page' not in st.session_state:
     st.session_state.active_page = 'Home'
     
 
+def save_image_tag_result(save_path, clicked, final_tag, satis_result, change1, change2, change3):
+    results_B = {'Image': f"{str(int(clicked)+1)}", 'Tag1': final_tag[0][0], 'Tag2': final_tag[1][0], 'Tag3': final_tag[2][0], 'Tags Satisfaction': satis_result, 'Change Tag1': change1, 'Change Tag2': change2, 'Change Tag3': change3}
+    if not os.path.exists(save_path):
+        data = {}
+        data['submits'] = []
+        data['submits'].append(results_B)
+        print("no exists", data)
+        with open(save_path, 'w') as save_f:
+            json.dump(data, save_f, ensure_ascii=False, indent=4)
+
+    else:
+        data = {}
+        with open(save_path, "r") as json_file:
+            data = json.load(json_file)
+        data['submits'].append(results_B)
+        print("exists, before", data)
+
+        with open(save_path, "w") as save_f:
+            json.dump(data, save_f, ensure_ascii=False, indent=4)
+            print("exists, after", data)
+
 # callback functions for change page
 def CB_Home():
     st.session_state.active_page = 'Page_1'
 
-def CB_Page1():
+def CB_Page1(save_path, clicked, final_tag, satis_result, change1, change2, change3):
+    save_image_tag_result(save_path, clicked, final_tag, satis_result, change1, change2, change3)
+    music_retrieval()
     st.session_state.active_page = 'Page_2'
 
 def CB_Page2():
     st.session_state.active_page = 'Page_3'
 
-def CB_Page3():
+def CB_Page3(save_path, clicked, final_tag, satis_result, change1, change2, change3):
+    save_image_tag_result(save_path, clicked, final_tag, satis_result, change1, change2, change3)
+    music_retrieval()
     st.session_state.active_page = 'Page_4'
 
 def CB_Page4():
     st.session_state.active_page = 'Page_5'
 
-def CB_Page5():
+def CB_Page5(save_path, clicked, final_tag, satis_result, change1, change2, change3):
+    save_image_tag_result(save_path, clicked, final_tag, satis_result, change1, change2, change3)
+    music_retrieval()
     st.session_state.active_page = 'Page_6'
 
 def CB_Page6():
     st.session_state.active_page = 'Page_7'
 
-def CB_Page7():
+def CB_Page7(save_path, clicked, final_tag, satis_result, change1, change2, change3):
+    save_image_tag_result(save_path, clicked, final_tag, satis_result, change1, change2, change3)
+    music_retrieval()
     st.session_state.active_page = 'Page_8'
 
 def CB_Page8():
@@ -121,7 +150,7 @@ mood_imgs = [
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/sad.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/sad_emotional.jpg?raw=true'              
             ]
- mood_imgs2 = [
+mood_imgs2 = [
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/dark_calm_nature.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/funny.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/mood/groovy_happy.jpg?raw=true',
@@ -165,6 +194,7 @@ def image_page(imgs, cb):
     st.markdown(hide_menu, unsafe_allow_html = True)
 
     save_path = st.experimental_get_query_params()['path'][0]
+
     # show imgs to be selected    
     selection = st.container()
     with selection:
@@ -189,243 +219,80 @@ def image_page(imgs, cb):
                                         div_style={"display": "flex", "justify-content": "center", "flex-wrap": "wrap"},
                                         img_style={"margin": "5px", "height": "200px"})  
             
-
             model_load_state.success('After clicking an image you like, scroll down and check the keywords below.')
-            selected_tags = all_tags[clicked]
-
-            final_tag = []
-            for tag in selected_tags:
-                tup = (tag, 0)
-                final_tag.append(tup)
             
                 
             # if some image is clicked,
-            if clicked >= 0:
+            if clicked > -1:
                 model_load_state.info(f"**Keywords of Image {str(int(clicked)+1)} Are Below.**")
+                selected_tags = all_tags[clicked]
+                final_tag = []
+                for tag in selected_tags:
+                    tup = (tag, 0)
+                    final_tag.append(tup)
+
+                if len(final_tag) == 2:
+                    final_tag.append(('-', 0))
+                elif len(final_tag) == 1:
+                    final_tag.append(('-', 0))
+                    final_tag.append(('-', 0))
+
                 # show final tags of selected image
-                show_tags = st.container()
-                print(show_tags)
-                with show_tags:
-                    if len(final_tag) == 3:
-                        st.write('-----')
-                        st.subheader(f"Keywords of Image {str(int(clicked)+1)}")
-                        col1, col2, col3 = st.columns(3)
-                        col1.metric('1st keyword', final_tag[0][0])
-                        col2.metric('2nd keyword', final_tag[1][0])
-                        col3.metric('3rd keyword', final_tag[2][0])
-                        satis_result = st.slider(label='Do you satisfy with the extracted keywords?', min_value=0, max_value=100, value=50)
-                        st.text("👉 If you like the auto-extracted keywords, click submit directly!")
-                        
-                        # revise the tags
-                        st.text("👉 If you are not satisfied with the auto-extracted keywords,")
-                        st.text("👉 please change the keyword from the options. You can select up to 3 keywords.")
-                        
-                        # select tag form
-                        change = []
-                        t1 = (f'{final_tag[0][0]}', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                                'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                                'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                                'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                                'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
-                        
-                        t2 = (f'{final_tag[1][0]}', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                                'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                                'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                                'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                                'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
-                        
-                        t3 = (f'{final_tag[2][0]}', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                                'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                                'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                                'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                                'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
-                        
-                        tc1, tc2, tc3 = st.columns(3)
-                        
-                        with tc1:
-                            change1 = st.selectbox("Select keyword", t1, key='tc1')
-                        
-                        with tc2:
-                            change2 = st.selectbox("Select keyword", t2, key='tc2')
-                        
-                        with tc3:
-                            change3 = st.selectbox("Select keyword", t3, key='tc3')
-
-
-                        # save results
-                        if st.checkbox("Do you want to move to the next page?", key='check1'):
-                            results_B = {'Image': f"{str(int(clicked)+1)}", 'Tag1': final_tag[0][0], 'Tag2': final_tag[1][0], 'Tag3': final_tag[2][0], 'Tags Satisfaction': satis_result, 'Change Tag1': change1, 'Change Tag2': change2, 'Change Tag3': change3}
-                            if not os.path.exists(save_path):
-                                data = {}
-                                data['submits'] = []
-                                data['submits'].append(results_B)
-                                print("no exists", data)
-                                with open(save_path, 'w') as save_f:
-                                    json.dump(data, save_f, ensure_ascii=False, indent=4)
-
-                            else:
-                                data = {}
-                                with open(save_path, "r") as json_file:
-                                    data = json.load(json_file)
-                                data['submits'].append(results_B)
-                                print("exists, before", data)
-
-                                with open(save_path, "w") as save_f:
-                                    json.dump(data, save_f, ensure_ascii=False, indent=4)
-                                    print("exists, after", data)
+                with st.container():
+                    st.write('-----')
+                    st.subheader(f"Keywords of Image {str(int(clicked)+1)}")
+                    col1, col2, col3 = st.columns(3)
+                    col1.metric('1st keyword', final_tag[0][0])
+                    col2.metric('2nd keyword', final_tag[1][0])
+                    col3.metric('3rd keyword', final_tag[2][0])
+                    satis_result = st.slider(label='Do you satisfy with the extracted keywords?', min_value=0, max_value=100, value=50)
+                    st.text("👉 If you like the auto-extracted keywords, click submit directly!")
                     
-                    elif len(final_tag) == 2:
-                        st.write('-----')
-                        st.subheader(f"Keywords of Image {str(int(clicked)+1)} are below.")
-                        col1, col2, col3 = st.columns(3)
-                        col1.metric('1st keyword', final_tag[0][0])
-                        col2.metric('2nd keyword', final_tag[1][0])
-                        col3.metric('3rd keyword', '-')
-                        satis_result = st.slider(label='Do you satisfy with the extracted keywords?', min_value=0, max_value=100, value=50)
-                        st.text("👉 If you like the auto-extracted keywords, click submit directly!")
-                        
-                        # revise the tags
-                        st.text("👉 If you are not satisfied with the auto-extracted keywords,")
-                        st.text("👉 please change the keyword from the options. You can select up to 3 keywords.")
-                        
-                        # select tag form
-                        change = []
-                        t1 = (f'{final_tag[0][0]}', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                                'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                                'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                                'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                                'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
-                        
-                        t2 = (f'{final_tag[1][0]}', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                                'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                                'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                                'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                                'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
-                        
-                        t3 = ('-', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                                'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                                'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                                'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                                'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
-                        
-                        tc1, tc2, tc3 = st.columns(3)
-                        
-                        with tc1:
-                            change1 = st.selectbox("Select keyword", t1, key='tc1')
-                        
-                        with tc2:
-                            change2 = st.selectbox("Select keyword", t2, key='tc2')
-                        
-                        with tc3:
-                            change3 = st.selectbox("Select keyword", t3, key='tc3')
-                        
-                        
-                        # save results
-                        if st.checkbox("Do you want to move to the next page?", key='check2'):
-                            if not os.path.exists(save_path):
-                                results_B = {'Image': f"{str(int(clicked)+1)}", 'Tag1': final_tag[0][0], 'Tag2': final_tag[1][0], 'Tag3': '-', 'Tags Satisfaction': satis_result, 'Change Tag1': change1, 'Change Tag2': change2, 'Change Tag3': change3}
-                                data = {}
-                                data['submits'] = []
-                                data['submits'].append(results_B)
-                                print("no exists", data)
-                                with open(save_path, 'w') as save_f:
-                                    json.dump(data, save_f, ensure_ascii=False, indent=4)
+                    # revise the tags
+                    st.text("👉 If you are not satisfied with the auto-extracted keywords,")
+                    st.text("👉 please change the keyword from the options. You can select up to 3 keywords.")
+                    
+                    # select tag form
+                    t1 = (final_tag[0][0], 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
+                            'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
+                            'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
+                            'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
+                            'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
+                    
+                    t2 = (final_tag[1][0], 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
+                            'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
+                            'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
+                            'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
+                            'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
+                    
+                    t3 = (final_tag[2][0], 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
+                            'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
+                            'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
+                            'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
+                            'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
 
-                            else:
-                                data = {}
-                                with open(save_path, "r") as json_file:
-                                    data = json.load(json_file)
-                                data['submits'].append(results_B)
-                                print("exists, before", data)
+                    tc1, tc2, tc3 = st.columns(3)
 
-                                with open(save_path, "w") as save_f:
-                                    json.dump(data, save_f, ensure_ascii=False, indent=4)
-                                    print("exists, after", data)
-                            
-                            
-                    else:
-                        st.write('-----')
-                        st.subheader(f"Keywords of Image {str(int(clicked)+1)} are below.")
-                        col1, col2, col3 = st.columns(3)
-                        print(final_tag[0][0])
-                        col1.metric('1st keyword', final_tag[0][0])
-                        col2.metric('2rd keyword', '-')
-                        col3.metric('3rd keyword', '-')
-                        satis_result = st.slider(label='Do you satisfy with the extracted keywords?', min_value=0, max_value=100, value=50)
-                        st.text("👉 If you like the auto-extracted keywords, click submit directly!")
-                        
-                        # revise the tags
-                        st.text("👉 If you are not satisfied with the auto-extracted keywords,")
-                        st.text("👉 please change the keyword from the options. You can select up to 3 keywords.")
-                        
-                        # select tag form
-                        change = []
-                        t1 = (f'{final_tag[0][0]}', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                                'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                                'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                                'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                                'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
-                        
-                        t2 = ('-', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                                'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                                'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                                'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                                'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
-                        
-                        t3 = ('-', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                                'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                                'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                                'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                                'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
-                        
-                        tc1, tc2, tc3 = st.columns(3)
-                        
-                        with tc1:
-                            change1 = st.selectbox("Select keyword", t1, key='tc1')
-                        
-                        with tc2:
-                            change2 = st.selectbox("Select keyword", t2, key='tc2')
-                        
-                        with tc3:
-                            change3 = st.selectbox("Select keyword", t3, key='tc3')
+                    with tc1:
+                        change1 = st.selectbox("Select keyword", t1, key = st.session_state.active_page + "tc1")
 
-                        # save results
-                        if st.checkbox("Do you want to move to the next page?", key='check3'):
-                            results_B = {'Image': f"{str(int(clicked)+1)}", 'Tag1': final_tag[0][0], 'Tag2': '-', 'Tag3': '-', 'Tags Satisfaction': satis_result, 'Change Tag1': change1, 'Change Tag2': change2, 'Change Tag3': change3}
-                            if not os.path.exists(save_path):
-                                data = {}
-                                data['submits'] = []
-                                data['submits'].append(results_B)
-                                print("no exists", data)
-                                with open(save_path, 'w') as save_f:
-                                    json.dump(data, save_f, ensure_ascii=False, indent=4)
-
-                            else:
-                                data = {}
-                                with open(save_path, "r") as json_file:
-                                    data = json.load(json_file)
-                                data['submits'].append(results_B)
-                                print("exists, before", data)
-
-                                with open(save_path, "w") as save_f:
-                                    json.dump(data, save_f, ensure_ascii=False, indent=4)
-                                    print("exists, after", data)
-                            
-                    st.experimental_set_query_params(path=save_path)                               
-                    st.button('NEXT', on_click=cb)
+                    with tc2:
+                        change2 = st.selectbox("Select keyword", t2, key = st.session_state.active_page + "tc2")
+                    
+                    with tc3:
+                        change3 = st.selectbox("Select keyword", t3, key = st.session_state.active_page + "tc3")
+        
+                    st.experimental_set_query_params(path=save_path)
+                    st.button('NEXT', on_click=cb, args=(save_path, clicked, final_tag, satis_result, change1, change2, change3, ))
 
             else:
                 model_load_state.info(f"**There is no image selected. Please select one image.**")
                 
-                
-                
-            
-
-        except:
+        except Exception as e:
+            print("Oops!", e.__class__, "occurred.")
             message_container = st.empty() 
             message = message_container.write('👉 Please, wait. Loading... 👀')
             if message != '':
-                time.sleep(23)
                 message_container.empty()
 
 
@@ -516,15 +383,17 @@ def music_retrieval():
             random_all = random.choices(elements_in_one_2nd, k=5)
         else: 
             random_all = random.choices(elements_in_one, k=5)
-
         
     else:
         a = find_tag_list
         elements_in_all = a
         random_all = random.choices(elements_in_all, k=5)
-        music_tags = st.container()
 
-    return random_all, save_path
+    st.session_state['music_random'] = random_all
+    for r in random_all:
+        print(r) # for debug
+        
+
     
 def createAudio(filename):
     remoteFilePath = sftp.dirRemoteMusicData + '/' + filename
@@ -536,15 +405,16 @@ def createAudio(filename):
 
 ## streamlit display codes
 def music_page(cb):
-    random_all, save_path = music_retrieval()
     st.title('Image to Music Retrieval')
     st.subheader("Now, we recommend a music list that matches the image!")
     st.write('-----')
     st.text("🎧 Please enjoy the music and answer the questions below. 🎧")
     st.markdown(hide_menu, unsafe_allow_html = True)
 
-    for i in range(5):
-        createAudio(str(random_all[i]) + '.mp3')
+    random_all = st.session_state['music_random']
+    for r in random_all:
+        print(r) # for debug
+        createAudio(str(r) + '.mp3')
 
     st.write('-----')
 
@@ -552,18 +422,19 @@ def music_page(cb):
     with st.container():
         satis_result = st.slider('Do you think the retrieved music represents the selected image well?', min_value=0, max_value=100, value=50, step=1)
         st.write('-----')
-        if st.checkbox("Do you want to move to the next page?", key='check4'):
-            with open(save_path, "r") as json_file:
-                results_B = {'Music Satisfaction': satis_result}
-                data = json.load(json_file)
-                data['submits'][-1].update(results_B)
+    
+        save_path = st.experimental_get_query_params()['path'][0]
+        with open(save_path, "r") as json_file:
+            results_B = {'Music Satisfaction': satis_result}
+            data = json.load(json_file)
+            data['submits'][-1].update(results_B)
 
-            with open(save_path, "w") as save_f:
-                json.dump(data, save_f, ensure_ascii=False, indent=4)    
-                print("exists, after", data)
-            
-            st.experimental_set_query_params(path=save_path)
-            st.button('NEXT', on_click=cb)
+        with open(save_path, "w") as save_f:
+            json.dump(data, save_f, ensure_ascii=False, indent=4)    
+            print("exists, after", data)
+        
+        st.experimental_set_query_params(path=save_path)
+        st.button('NEXT', on_click=cb)
 
 
 ## ------------------ for Survey ------------------------ 
