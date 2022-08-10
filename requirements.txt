@@ -4,3 +4,4 @@ numpy==1.19.5
 tqdm==4.62.3
 uuid==1.30
 pysftp==0.2.9
+pillow==8.4.0
