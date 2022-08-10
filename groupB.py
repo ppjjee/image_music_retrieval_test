@@ -94,7 +94,9 @@ def CB_Page9():
 sftp = SFTP(st.secrets["HOSTNAME"], st.secrets["USERNAME"], st.secrets["PASSWORD"])
 
 def home():
-    result_file_name = str(uuid.uuid4()) + ".json"
+    id = str(uuid.uuid4())
+    st.session_state['id'] = id
+    result_file_name = id + ".json"
     save_path = get_result_dir() + "/" + result_file_name
     
     header = st.container()
@@ -290,13 +292,13 @@ def image_page(imgs, cb):
                     tc1, tc2, tc3 = st.columns(3)
 
                     with tc1:
-                        change1 = st.selectbox("Select keyword", t1, key = st.session_state.active_page + "tc1")
+                        change1 = st.selectbox("Select keyword", t1, key = str(uuid.uuid4()))
 
                     with tc2:
-                        change2 = st.selectbox("Select keyword", t2, key = st.session_state.active_page + "tc2")
+                        change2 = st.selectbox("Select keyword", t2, key = str(uuid.uuid4()))
                     
                     with tc3:
-                        change3 = st.selectbox("Select keyword", t3, key = st.session_state.active_page + "tc3")
+                        change3 = st.selectbox("Select keyword", t3, key = str(uuid.uuid4()))
         
                     st.experimental_set_query_params(path=save_path)
                     st.button('NEXT', on_click=cb, args=(save_path, clicked, final_tag, satis_result, change1, change2, change3, ))
@@ -543,6 +545,10 @@ def survey_page():
             ('Strongly agree', 'Agree', 'Neutral', 'Disagree', 'Strongly disagree'))
         st.write('-----')
 
+        id = st.session_state['id']
+        st.text(f"Here is your ID: " + id)
+        st.text('Copy this value to paste into MTurk.')
+        st.text('When you have copied this ID, please click the check box below to submit your survey.')
 
         ## save results
         if st.checkbox("Do you want to move to the next page?", key='fin'):
@@ -559,6 +565,7 @@ def survey_page():
              'valence1': valence1,
              'valence2': valence2,
              'valence3': valence3,
+             'workerID' : id
              }
             with open(save_path, "r") as json_file:
                 data = {}
@@ -569,7 +576,8 @@ def survey_page():
                 json.dump(data, save_f, ensure_ascii=False, indent=4)
                 print("exists, after", data)
             
-            sftp.upload(save_path, sftp.dirRemoteSurveyResult + '/' + str(uuid.uuid4()) + ".json")
+            id = st.session_state['id']
+            sftp.upload(save_path, sftp.dirRemoteSurveyResult + '/' + id + ".json")
             st.button('END', on_click=CB_Page9)  
                                                 
 
