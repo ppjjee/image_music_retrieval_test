@@ -121,7 +121,7 @@ def home():
             st.text("We give you several kinds of image choices.")
             st.text("Select an image you like the most, then keywords will show up that match the selected image (up to 3).")
             st.text("If you are not satisfied with the keywords, you can change them from the selection.")
-            st.text("When keyword selection is complete, we will automatically recommend music that matchs the image.")
+            st.text("When keyword selection is complete, we will automatically recommend music that matches the image.")
             st.write('-----')
 
 
