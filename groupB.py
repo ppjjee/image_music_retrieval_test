@@ -292,13 +292,13 @@ def image_page(imgs, cb):
                     tc1, tc2, tc3 = st.columns(3)
 
                     with tc1:
-                        change1 = st.selectbox("Select keyword", t1, key = str(uuid.uuid4()))
+                        change1 = st.selectbox("Select keyword", t1, key = st.session_state.active_page + "tc1", index=0)
 
                     with tc2:
-                        change2 = st.selectbox("Select keyword", t2, key = str(uuid.uuid4()))
+                        change2 = st.selectbox("Select keyword", t2, key = st.session_state.active_page + "tc2", index=0)
                     
                     with tc3:
-                        change3 = st.selectbox("Select keyword", t3, key = str(uuid.uuid4()))
+                        change3 = st.selectbox("Select keyword", t3, key = st.session_state.active_page + "tc3", index=0)
         
                     st.experimental_set_query_params(path=save_path)
                     st.button('NEXT', on_click=cb, args=(save_path, clicked, final_tag, satis_result, change1, change2, change3, ))
