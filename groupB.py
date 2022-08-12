@@ -27,8 +27,15 @@ if 'active_page' not in st.session_state:
     st.session_state.active_page = 'Home'
     
 
-def save_image_tag_result(save_path, clicked, final_tag, satis_result, change1, change2, change3):
-    results_B = {'Image': f"{str(int(clicked)+1)}", 'Tag1': final_tag[0][0], 'Tag2': final_tag[1][0], 'Tag3': final_tag[2][0], 'Tags Satisfaction': satis_result, 'Change Tag1': change1, 'Change Tag2': change2, 'Change Tag3': change3}
+def save_image_tag_result(save_path, clicked, selected_tags, satis_result, change):
+    conv_change = []
+    for i, c in enumerate(change):
+        target = c
+        if c == "-":
+            target = selected_tags[i]
+        conv_change.append(target)
+    print(conv_change)
+    results_B = {'Image': f"{str(int(clicked)+1)}", 'Tag1': selected_tags[0], 'Tag2': selected_tags[1], 'Tag3': selected_tags[2], 'Tags Satisfaction': satis_result, 'Change Tag1': conv_change[0], 'Change Tag2': conv_change[1], 'Change Tag3': conv_change[2]}
     if not os.path.exists(save_path):
         data = {}
         data['submits'] = []
@@ -55,32 +62,32 @@ def CB_Home():
 def CB_Page0():
     st.session_state.active_page = 'Page_1'
 
-def CB_Page1(save_path, clicked, final_tag, satis_result, change1, change2, change3):
-    save_image_tag_result(save_path, clicked, final_tag, satis_result, change1, change2, change3)
+def CB_Page1(save_path, clicked, selected_tags, satis_result, change):
+    save_image_tag_result(save_path, clicked, selected_tags, satis_result, change)
     music_retrieval()
     st.session_state.active_page = 'Page_2'
 
 def CB_Page2():
     st.session_state.active_page = 'Page_3'
 
-def CB_Page3(save_path, clicked, final_tag, satis_result, change1, change2, change3):
-    save_image_tag_result(save_path, clicked, final_tag, satis_result, change1, change2, change3)
+def CB_Page3(save_path, clicked, selected_tags, satis_result, change):
+    save_image_tag_result(save_path, clicked, selected_tags, satis_result, change)
     music_retrieval()
     st.session_state.active_page = 'Page_4'
 
 def CB_Page4():
     st.session_state.active_page = 'Page_5'
 
-def CB_Page5(save_path, clicked, final_tag, satis_result, change1, change2, change3):
-    save_image_tag_result(save_path, clicked, final_tag, satis_result, change1, change2, change3)
+def CB_Page5(save_path, clicked, selected_tags, satis_result, change):
+    save_image_tag_result(save_path, clicked, selected_tags, satis_result, change)
     music_retrieval()
     st.session_state.active_page = 'Page_6'
 
 def CB_Page6():
     st.session_state.active_page = 'Page_7'
 
-def CB_Page7(save_path, clicked, final_tag, satis_result, change1, change2, change3):
-    save_image_tag_result(save_path, clicked, final_tag, satis_result, change1, change2, change3)
+def CB_Page7(save_path, clicked, selected_tags, satis_result, change):
+    save_image_tag_result(save_path, clicked, selected_tags, satis_result, change)
     music_retrieval()
     st.session_state.active_page = 'Page_8'
 
@@ -200,6 +207,13 @@ theme_imgs2 = [
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/sport_action_adventure.jpg?raw=true',
                 'https://github.com/ppjjee/image_music_retrieval_test/blob/main/theme/summer_holiday_travel.jpg?raw=true',
             ]
+music_tags = [
+    '-', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
+    'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
+    'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
+    'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
+    'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting'
+    ]
 
 def image_page(imgs, cb):
     # show frontend title 
@@ -239,92 +253,60 @@ def image_page(imgs, cb):
                 
             # if some image is clicked,
             if clicked > -1:
-                # model_load_state.info(f"**Keywords of Image {str(int(clicked)+1)} Are Below.**")
                 model_load_state.warning(f"**Keywords of Image #{str(int(clicked)+1)} Are Below.**")
                 selected_tags = all_tags[clicked]
-                final_tag = []
-                for tag in selected_tags:
-                    tup = (tag, 0)
-                    final_tag.append(tup)
-
-                if len(final_tag) == 2:
-                    final_tag.append(('-', 0))
-                elif len(final_tag) == 1:
-                    final_tag.append(('-', 0))
-                    final_tag.append(('-', 0))
+                
+                if len(selected_tags) == 2:
+                    selected_tags.append('-')
+                elif len(selected_tags) == 1:
+                    selected_tags.append('-')
+                    selected_tags.append('-')
 
 
                 # show final tags of selected image
-                with st.container():
-                    st.write('-----')
-                    st.warning(f'Keywords of Image #{str(int(clicked)+1)} Are Below.')
-                    st.subheader(f"Keywords of Image #{str(int(clicked)+1)}")
-                    col1, col2, col3 = st.columns(3)
-                    col1.metric('1st keyword', final_tag[0][0])
-                    col2.metric('2nd keyword', final_tag[1][0])
-                    col3.metric('3rd keyword', final_tag[2][0])
-                    # satis_result = st.slider(label='Do you satisfy with the extracted keywords?', min_value=0, max_value=100, value=50)
-                    satis_result = st.select_slider('Do you satisfy with the extracted keywords?', options=['Extremely dissatisfied', 'Moderately dissatisfied', 'Slightly dissatisfied', 'Neither satisfied nor dissatisfied', 'Slightly satisfied', 'Moderately satisfied', 'Extremely satisfied'], value='Neither satisfied nor dissatisfied')
-                    st.text("👉 If you like the auto-extracted keywords, click submit directly!")
-                    
-                    # revise the tags
-                    st.text("👉 If you are not satisfied with the auto-extracted keywords,")
-                    st.text("👉 please change the keyword from the options. You can select up to 3 keywords.")
-                    
-                    # select tag form
-                    t1 = (final_tag[0][0], 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                            'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                            'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                            'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                            'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
-                    
-                    t2 = (final_tag[1][0], 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                            'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                            'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                            'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                            'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
-                    
-                    t3 = (final_tag[2][0], final_tag[2][0], 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
-                            'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
-                            'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
-                            'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
-                            'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
+               
+                st.write('-----')
+                st.warning(f'Keywords of Image #{str(int(clicked)+1)} Are Below.')
+                st.subheader(f"Keywords of Image #{str(int(clicked)+1)}")
+                col1, col2, col3 = st.columns(3)
+                col1.metric('1st keyword', selected_tags[0])
+                col2.metric('2nd keyword', selected_tags[1])
+                col3.metric('3rd keyword', selected_tags[2])
+                # satis_result = st.slider(label='Do you satisfy with the extracted keywords?', min_value=0, max_value=100, value=50)
+                satis_result = st.select_slider('Do you satisfy with the extracted keywords?', options=['Extremely dissatisfied', 'Moderately dissatisfied', 'Slightly dissatisfied', 'Neither satisfied nor dissatisfied', 'Slightly satisfied', 'Moderately satisfied', 'Extremely satisfied'], value='Neither satisfied nor dissatisfied')
+                st.text("👉 If you like the auto-extracted keywords, click submit directly!")
+                
+                # revise the tags
+                st.text("👉 If you are not satisfied with the auto-extracted keywords,")
+                st.text("👉 please change the keyword from the options. You can select up to 3 keywords.")
+                
+                change = []
+                tc1, tc2, tc3 = st.columns(3)
+                with tc1:
+                    k = st.session_state.active_page + "_tc1"
+                    change.append(st.selectbox("Select keyword", music_tags, key=k))
 
-                    tc1, tc2, tc3 = st.columns(3)
-                    # def first_change_tags():
-                    #     tag1 = final_tag[0][0]
-                    #     return tag1
-                    # def second_change_tags():
-                    #     tag2 = final_tags[1][0]
-                    #     return tag2
-                    # def third_change_tags():
-                    #     tag3 = final_tags[2][0]
-                    #     return tag3
-                    
-                    with tc1:
-                        change1 = st.selectbox("Select keyword", t1, key=st.session_state.active_page + "tc1")#key=st.session_state.active_page + "tc1", index=0
-
-                    with tc2:
-                        change2 = st.selectbox("Select keyword", t2, key=st.session_state.active_page + "tc2")# key = str(uuid.uuid4()), index=0
-                    
-                    with tc3:
-                        change3 = st.selectbox("Select keyword", t3, key=st.session_state.active_page + "tc3")
-        
-                    st.experimental_set_query_params(path=save_path)
-                    st.button('NEXT', on_click=cb, args=(save_path, clicked, final_tag, satis_result, change1, change2, change3, ))
+                with tc2:
+                    k = st.session_state.active_page + "_tc2"
+                    change.append(st.selectbox("Select keyword", music_tags, key=k))
+                
+                with tc3:
+                    k = st.session_state.active_page + "_tc3"
+                    change.append(st.selectbox("Select keyword", music_tags, key=k))
+    
+                st.experimental_set_query_params(path=save_path)
+                st.button('NEXT', on_click=cb, args=(save_path, clicked, selected_tags, satis_result, change, ))
 
             else:
                 model_load_state.info(f"**There is no image selected. Please select one image.**")
                 
         except Exception as e:
             print("Oops!", e.__class__, "occurred.")
+            print(e)
             message_container = st.empty() 
             message = message_container.write('👉 Please, wait. Loading... 👀')
             if message != '':
                 message_container.empty()
-
-
-
 
 
 ## ------------------ for Mood Music Retrieval ------------------------    
