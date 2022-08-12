@@ -253,6 +253,7 @@ def image_page(imgs, cb):
                     final_tag.append(('-', 0))
                     final_tag.append(('-', 0))
 
+
                 # show final tags of selected image
                 with st.container():
                     st.write('-----')
@@ -271,34 +272,43 @@ def image_page(imgs, cb):
                     st.text("👉 please change the keyword from the options. You can select up to 3 keywords.")
                     
                     # select tag form
-                    t1 = ('-', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
+                    t1 = (final_tag[0][0], 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
                             'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
                             'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
                             'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
                             'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
                     
-                    t2 = ('-', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
+                    t2 = (final_tag[1][0], 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
                             'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
                             'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
                             'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
                             'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
                     
-                    t3 = ('-', 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
+                    t3 = (final_tag[2][0], final_tag[2][0], 'action', 'adventure', 'advertising', 'background', 'ballad', 'calm', 'children', 'christmas', 'commercial', 'cool', 'corporate',
                             'dark', 'deep', 'documentary', 'drama', 'dramatic', 'dream', 'emotional', 'energetic', 'epic', 'fast', 'film', 'fun', 'funny', 'game',
                             'groovy', 'happy', 'heavy', 'holiday', 'hopeful', 'inspiring', 'love', 'meditative', 'melancholic', 'melodic', 'motivational',
                             'movie', 'nature', 'party', 'positive', 'powerful', 'relaxing', 'retro', 'romantic', 'sad', 'sexy', 'slow', 'soft', 'soundscape', 
                             'space', 'sport', 'summer', 'trailer', 'travel', 'upbeat', 'uplifting')
 
                     tc1, tc2, tc3 = st.columns(3)
-
+                    # def first_change_tags():
+                    #     tag1 = final_tag[0][0]
+                    #     return tag1
+                    # def second_change_tags():
+                    #     tag2 = final_tags[1][0]
+                    #     return tag2
+                    # def third_change_tags():
+                    #     tag3 = final_tags[2][0]
+                    #     return tag3
+                    
                     with tc1:
-                        change1 = st.selectbox("Select keyword", t1, key=st.session_state.active_page + "tc1", index=0)
+                        change1 = st.selectbox("Select keyword", t1, key=st.session_state.active_page + "tc1")#key=st.session_state.active_page + "tc1", index=0
 
                     with tc2:
-                        change2 = st.selectbox("Select keyword", t2, key=st.session_state.active_page + "tc2", index=0 )# key = str(uuid.uuid4()), index=0
+                        change2 = st.selectbox("Select keyword", t2, key=st.session_state.active_page + "tc2")# key = str(uuid.uuid4()), index=0
                     
                     with tc3:
-                        change3 = st.selectbox("Select keyword", t3, key=st.session_state.active_page + "tc3", index=0)
+                        change3 = st.selectbox("Select keyword", t3, key=st.session_state.active_page + "tc3")
         
                     st.experimental_set_query_params(path=save_path)
                     st.button('NEXT', on_click=cb, args=(save_path, clicked, final_tag, satis_result, change1, change2, change3, ))
